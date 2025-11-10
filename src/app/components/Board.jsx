@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import TicketList from './TicketList';
+import StatusFilter from './StatusFilter';
+import PriorityFilter from './PriorityFilter';
 
 export default function Board() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [queue, setQueue] = useState({});
+  const [filters, setFilters] = useState({ status: 'All', priority: 'All' });
 
   useEffect(() => {
     async function fetchTickets() {
@@ -37,6 +40,18 @@ if (error) return <p className="text-red-600">{error}</p>;
 return (
   <section className="rounded-xl border p-4">
     <h2 className="text-lg font-semibold mb-3">Tickets</h2>
+
+    <div className="grid gap-3 sm:grid-cols-2 mb-4">
+      <StatusFilter
+        value={filters.status}
+        onChange={(v) => setFilters(f => ({ ...f, status: v }))}
+      />
+      <PriorityFilter
+        value={filters.priority}
+        onChange={(v) => setFilters(f => ({ ...f, priority: v }))}
+      />
+    </div>
+
     <TicketList
       tickets={tickets}
       queue={queue}
@@ -44,5 +59,6 @@ return (
     />
   </section>
 );
+
 
 }
