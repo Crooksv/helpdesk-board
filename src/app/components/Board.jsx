@@ -5,6 +5,7 @@ import TicketList from './TicketList';
 import StatusFilter from './StatusFilter';
 import PriorityFilter from './PriorityFilter';
 import SearchBox from './SearchBox';
+import StatusMessage from './StatusMessage';
 
 export default function Board() {
   const [tickets, setTickets] = useState([]);
@@ -48,12 +49,12 @@ export default function Board() {
   });
 }, [tickets, filters, search]);
 
-  function handleAddToQueue(id) {
+ const isEmpty = !loading && !error && visibleTickets.length === 0;
+
+function handleAddToQueue(id) {
   setQueue((prev) => (prev[id] ? prev : { ...prev, [id]: true }));
 }
 
-if (loading) return <p>Loading tickets...</p>;
-if (error) return <p className="text-red-600">{error}</p>;
 
 return (
   <section className="rounded-xl border p-4">
@@ -71,13 +72,16 @@ return (
   <SearchBox value={search} onChange={setSearch} />
 </div>
 
-    <TicketList
-      tickets={visibleTickets}
-      queue={queue}
-      onAddToQueue={handleAddToQueue}
-    />
+<StatusMessage loading={loading} error={!!error} isEmpty={isEmpty} />
+
+   {!loading && !error && !isEmpty && (
+      <TicketList
+        tickets={visibleTickets}
+        queue={queue}
+        onAddToQueue={handleAddToQueue}
+      />
+    )}
   </section>
 );
-
 
 }
