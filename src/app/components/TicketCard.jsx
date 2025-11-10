@@ -1,6 +1,6 @@
 'use client';
 
-export default function TicketCard({ ticket }) {
+export default function TicketCard({ ticket, inQueue, onAddToQueue }) {
   const updated = new Date(ticket.updatedAt);
   return (
     <article className="rounded-xl border p-4 shadow-sm">
@@ -29,6 +29,20 @@ export default function TicketCard({ ticket }) {
           <dd className="font-medium">{updated.toLocaleString()}</dd>
         </div>
       </dl>
+
+      <div className="mt-3">
+        <button
+          className="w-full rounded-xl px-3 py-2 text-sm font-medium border disabled:opacity-50"
+          onClick={onAddToQueue}
+          disabled={inQueue}
+          aria-disabled={inQueue}
+        >
+          {inQueue ? 'Already in My Queue' : 'Add to My Queue'}
+        </button>
+        {inQueue && (
+          <p className="mt-1 text-xs text-gray-500">This ticket is in your queue.</p>
+        )}
+      </div>
     </article>
   );
 }
