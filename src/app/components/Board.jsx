@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import TicketList from './TicketList';
 import StatusFilter from './StatusFilter';
 import PriorityFilter from './PriorityFilter';
+import SearchBox from './SearchBox';
 
 export default function Board() {
   const [tickets, setTickets] = useState([]);
@@ -11,6 +12,7 @@ export default function Board() {
   const [error, setError] = useState('');
   const [queue, setQueue] = useState({});
   const [filters, setFilters] = useState({ status: 'All', priority: 'All' });
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     async function fetchTickets() {
@@ -41,16 +43,17 @@ return (
   <section className="rounded-xl border p-4">
     <h2 className="text-lg font-semibold mb-3">Tickets</h2>
 
-    <div className="grid gap-3 sm:grid-cols-2 mb-4">
-      <StatusFilter
-        value={filters.status}
-        onChange={(v) => setFilters(f => ({ ...f, status: v }))}
-      />
-      <PriorityFilter
-        value={filters.priority}
-        onChange={(v) => setFilters(f => ({ ...f, priority: v }))}
-      />
-    </div>
+  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-4">
+  <StatusFilter
+    value={filters.status}
+    onChange={(v) => setFilters(f => ({ ...f, status: v }))}
+  />
+  <PriorityFilter
+    value={filters.priority}
+    onChange={(v) => setFilters(f => ({ ...f, priority: v }))}
+  />
+  <SearchBox value={search} onChange={setSearch} />
+</div>
 
     <TicketList
       tickets={tickets}
