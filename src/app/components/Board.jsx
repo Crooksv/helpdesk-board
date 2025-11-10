@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import TicketList from './TicketList';
 import StatusFilter from './StatusFilter';
 import PriorityFilter from './PriorityFilter';
@@ -32,6 +32,22 @@ export default function Board() {
     fetchTickets();
   }, []);
 
+  const visibleTickets = useMemo(() => {
+  const q = search.trim().toLowerCase();
+
+  return tickets.filter(t => {
+    if (filters.status !== 'All' && t.status !== filters.status) return false;
+    if (filters.priority !== 'All' && t.priority !== filters.priority) return false;
+
+    if (q) {
+      const haystack = `${t.title} ${t.description}`.toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+
+    return true;
+  });
+}, [tickets, filters, search]);
+
   function handleAddToQueue(id) {
   setQueue((prev) => (prev[id] ? prev : { ...prev, [id]: true }));
 }
@@ -56,7 +72,7 @@ return (
 </div>
 
     <TicketList
-      tickets={tickets}
+      tickets={visibleTickets}
       queue={queue}
       onAddToQueue={handleAddToQueue}
     />
