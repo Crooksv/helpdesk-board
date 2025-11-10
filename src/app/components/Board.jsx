@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import TicketList from './TicketList';
 
 export default function Board() {
   const [tickets, setTickets] = useState([]);
@@ -28,12 +29,11 @@ export default function Board() {
   if (loading) return <p>Loading tickets...</p>;
   if (error) return <p className="text-red-600">{error}</p>;
 
-  return (
-    <section className="rounded-xl border p-4">
-      <h2 className="text-lg font-semibold mb-2">Tickets Loaded</h2>
-      <p className="text-sm text-gray-700">
-        Total Tickets: {tickets.length}
-      </p>
-    </section>
-  );
+ return (
+  <section className="rounded-xl border p-4">
+    <h2 className="text-lg font-semibold mb-3">Tickets</h2>
+    <TicketList tickets={tickets} />
+  </section>
+);
+
 }
